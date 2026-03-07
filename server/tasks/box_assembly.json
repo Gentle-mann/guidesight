@@ -1,0 +1,77 @@
+{
+  "id": "box_assembly",
+  "name": "Shipping Box Assembly & Seal",
+  "description": "Assemble a flat cardboard box, seal it with proper H-tape pattern, and prepare it for shipping — the standard process used in warehouses and fulfillment centers worldwide.",
+  "difficulty": "beginner",
+  "estimated_time": "3 minutes",
+  "components": [
+    "1x Flat cardboard box",
+    "1x Roll of packing tape"
+  ],
+  "steps": [
+    {
+      "step": 1,
+      "instruction": "Open the flat box and pop it into a rectangular shape. Hold it upright so you can see inside — it should form an open-top, open-bottom tube.",
+      "visual_cue": "Box is standing upright in a rectangular tube shape with both ends open.",
+      "common_errors": [
+        "Box is still flat or only partially opened",
+        "Creases not fully bent to 90 degrees"
+      ]
+    },
+    {
+      "step": 2,
+      "instruction": "Flip the box upside down so the bottom faces up. Identify the four flaps: two SHORT flaps (on the narrower sides of the box) and two LONG flaps (on the wider sides). The short flaps are noticeably smaller — roughly half the width of the long flaps. Fold the two SHORT flaps inward first. They MUST go in before the long flaps.",
+      "visual_cue": "ONLY the two short flaps are folded inward and lying flat inside the box. The two long flaps are still sticking UP — not folded. From above, you should see: two small flaps lying flat at each narrow end, with a visible gap between them in the center, and two large flaps standing upright on the wider sides. If you see large flaps already folded down covering the box opening, this step was done WRONG (long flaps went first).",
+      "during_action_cues": [
+        "WATCH which flaps the user reaches for FIRST. Short flaps are on the NARROW ends of the box — they are visibly smaller. Long flaps are on the WIDE sides — they are larger and span the full width.",
+        "If you see the user grabbing or folding a flap that spans the FULL WIDTH of the box (the longer dimension), STOP THEM IMMEDIATELY — that is a long flap, not a short flap. The long flaps must go LAST.",
+        "CRITICAL VISUAL CHECK: After flaps are folded, look at the box from above. If two large flaps are folded down and you can see the interior between them, those are LONG flaps folded incorrectly. Correct state: two SMALL flaps folded with LARGE flaps still sticking up.",
+        "If the folded flaps cover most of the box opening, those are long flaps (WRONG). If the folded flaps are small and leave a large gap in the center, those are short flaps (CORRECT)."
+      ],
+      "common_errors": [
+        "Folding long flaps first instead of short flaps — this is the #1 mistake. Look at the SIZE of the folded flaps: if they span the full width of the box, they are long flaps and were folded in the wrong order. The bottom will be structurally weak.",
+        "Flaps not folded fully flat against the bottom",
+        "VISUAL INDICATOR OF WRONG ORDER: If you see two large flaps folded down with the box interior visible between them (like looking into a slot), the long flaps were folded first. Correct: two small flaps folded with two large flaps still upright."
+      ]
+    },
+    {
+      "step": 3,
+      "instruction": "Now fold the two LONG flaps down over the short flaps. They should meet in the center, forming a flat sealed bottom with a seam running down the middle.",
+      "visual_cue": "Bottom is fully closed. Long flaps meet at center seam. Surface is flat. No gaps visible between the two long flaps.",
+      "common_errors": [
+        "Long flaps overlapping unevenly — one side sticking out more than the other",
+        "Gap between the two long flaps at the center seam",
+        "Flaps not pressed flat — bottom still has a bump or ridge"
+      ]
+    },
+    {
+      "step": 4,
+      "instruction": "Apply tape along the center seam where the two long flaps meet. Run the tape the full length of the seam, extending about 2-3 inches past each edge of the box.",
+      "visual_cue": "Single strip of tape running along the full center seam of the bottom, extending past both edges.",
+      "common_errors": [
+        "Tape does not cover the full seam length",
+        "Tape not extended past the box edges",
+        "Tape applied crooked or wrinkled"
+      ]
+    },
+    {
+      "step": 5,
+      "instruction": "Apply the H-tape: add two short strips of tape across each end of the box bottom, perpendicular to the center seam. This reinforces the edges where the flaps meet the sides. The center tape plus these two cross-strips form an H shape.",
+      "visual_cue": "H-tape pattern visible on box bottom: one long center strip plus two short perpendicular strips at each end, forming the letter H.",
+      "common_errors": [
+        "Missing one of the cross-strips",
+        "Cross-strips not covering the flap-to-side seam",
+        "Only taping the center without the H reinforcement"
+      ]
+    },
+    {
+      "step": 6,
+      "instruction": "Flip the box right-side up so the sealed bottom is on the table. The box should stand on its own with the opening facing up, ready to be loaded. Give it a gentle press to confirm the bottom is solid.",
+      "visual_cue": "Box is standing upright on its sealed bottom, open top facing up, stable and ready for packing.",
+      "common_errors": [
+        "Bottom pops open or feels weak when pressed",
+        "Box is lopsided or not standing straight"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ["python312", "gcc", "cmake", "libGL", "mesa"]
+
+[phases.install]
+cmds = ["pip install -r requirements.txt"]
+
+[start]
+cmd = "cd server && python token_server.py"

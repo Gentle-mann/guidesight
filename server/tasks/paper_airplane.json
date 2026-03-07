@@ -1,0 +1,125 @@
+{
+  "id": "paper_airplane",
+  "name": "Fold a Paper Airplane",
+  "description": "Fold a classic dart paper airplane that flies straight and far. No tools needed — just a single sheet of paper.",
+  "difficulty": "beginner",
+  "estimated_time": "3 minutes",
+  "cv_tools": ["paper_detection", "hand_tracking", "edge_detection"],
+  "components": [
+    "1x Sheet of A4 or letter-size paper"
+  ],
+  "steps": [
+    {
+      "step": 1,
+      "instruction": "Place the paper in portrait orientation (tall, not wide). Fold it in half lengthwise by bringing the left edge to meet the right edge. Crease firmly, then unfold.",
+      "visual_cue": "The paper is flat with a single vertical crease running top to bottom down the exact center. The paper should be in portrait orientation (taller than wide).",
+      "during_action_cues": [
+        "User picks up the paper or lays it flat — check orientation: should be portrait (tall), not landscape (wide)",
+        "User's hands move to fold — watch the direction: they should bring the LEFT edge toward the RIGHT edge (or vice versa), creating a vertical fold",
+        "The fold line should run top-to-bottom, NOT left-to-right",
+        "After folding, user should press/crease along the fold firmly with fingers or a flat edge",
+        "User should then unfold the paper back flat — the crease should remain visible"
+      ],
+      "common_errors": [
+        "Paper is in landscape orientation (wide, not tall) — CATCH THIS BEFORE THEY FOLD",
+        "Folding horizontally (top edge to bottom edge) instead of vertically (left to right) — this is the most common mistake",
+        "Not creasing firmly enough — the center line should be clearly visible after unfolding",
+        "Forgetting to unfold — the paper should be flat with a visible crease, not still folded"
+      ]
+    },
+    {
+      "step": 2,
+      "instruction": "Fold the top-left corner down so its edge aligns with the center crease. Then do the same with the top-right corner. Both corners fold down to meet at the center.",
+      "visual_cue": "Two diagonal folds form a triangle/arrow point at the top of the paper. The folded edges of both corners meet precisely along the center crease. The bottom half remains a flat rectangle.",
+      "during_action_cues": [
+        "User reaches for a top corner — watch WHICH corner and WHERE they fold it toward",
+        "The corner should fold DOWN and INWARD toward the center crease line",
+        "The diagonal edge of the fold should align with the vertical center crease",
+        "Watch that the fold is tight against the center line — no gap between the folded edge and the crease",
+        "After one corner, watch them do the same with the other corner — both should be symmetrical",
+        "The point at the top where both corners meet should be sharp, not rounded or offset"
+      ],
+      "common_errors": [
+        "Folding only one corner and forgetting the other — remind them to do both sides",
+        "Corner doesn't reach the center crease — there's a visible gap between the folded edge and the center line",
+        "Corner goes PAST the center crease, overlapping — the folded edge should land exactly ON the center line",
+        "Corners are folded at different angles, making the point asymmetrical — one side is wider than the other",
+        "Folding the bottom corners instead of the top corners"
+      ]
+    },
+    {
+      "step": 3,
+      "instruction": "Fold the triangular point down so the tip reaches about 2-3 cm (roughly 1 inch) above the bottom edge of the paper. Crease well.",
+      "visual_cue": "The triangle has been folded down like an envelope flap. The tip of the triangle points downward but stops about a finger-width above the bottom edge. The overall shape looks like a wide envelope or a house shape.",
+      "during_action_cues": [
+        "User grabs the pointed top — watch which direction they fold it: should be DOWNWARD (toward the bottom of the paper)",
+        "The point should fold DOWN over the diagonal edges, lying flat against the paper",
+        "Watch how FAR down they fold it — the tip should NOT touch the very bottom edge; it stops about 2-3 cm (one finger-width) above it",
+        "The fold line should be roughly horizontal, running straight across the paper",
+        "User should crease this fold firmly"
+      ],
+      "common_errors": [
+        "Folding the point UPWARD instead of downward — the point must fold toward the bottom of the paper",
+        "Folding the point all the way to the bottom edge — it should stop about 2-3 cm short, leaving a small rectangle of paper visible below the tip",
+        "Not folding enough — the point should come most of the way down, leaving only about a finger-width gap",
+        "The fold line is crooked/diagonal instead of straight across — this will cause asymmetry later"
+      ]
+    },
+    {
+      "step": 4,
+      "instruction": "Fold the new top-left corner down to the center crease, then the top-right corner. These are similar to step 2 but start higher up since the triangle is folded down. The new corner folds should meet at the center just above the folded-down triangle tip.",
+      "visual_cue": "Two new diagonal folds create a sharper, narrower point at the top. Below the new folds, the small triangle tip from step 3 peeks out — a small triangular tab is visible where the new corners meet.",
+      "during_action_cues": [
+        "User reaches for the new top corners — these are above the horizontal fold from step 3",
+        "Each corner folds DOWN and INWARD to the center crease, same motion as step 2",
+        "Watch that the folded edges align with the center crease — no gaps, no overlaps",
+        "The point where both new corners meet should be just ABOVE the tip of the folded-down triangle from step 3",
+        "A small triangular tab from step 3 should be visible poking out below the new corner folds — this is important for the next step",
+        "Both sides should be symmetrical"
+      ],
+      "common_errors": [
+        "New folds don't reach the center crease — visible gap between folded edge and center",
+        "Folding over the triangle flap from step 3 — the flap should still be visible underneath",
+        "The new folds start from the wrong spot — they should start from the top edge of the paper, above the step 3 horizontal fold",
+        "Asymmetrical folds — one side is wider or at a different angle than the other"
+      ]
+    },
+    {
+      "step": 5,
+      "instruction": "See that small triangle tip poking out from under the corner folds? Fold it UPWARD over the two corner flaps to lock them in place. It acts like a tab holding an envelope closed.",
+      "visual_cue": "The small triangular tab is now folded UP and over the two corner flaps, pinning them down. It looks like the clasp on an envelope. All the folds on this side should feel locked and secure.",
+      "during_action_cues": [
+        "User should identify the small triangle tab peeking out below the corner folds from step 4",
+        "They fold this tab UPWARD (toward the top of the paper), flipping it over the edges of the two corner folds",
+        "The tab should lay flat over the corner folds, locking them in place",
+        "Watch that they fold the RIGHT flap — it's the small triangle from step 3, not one of the corner folds"
+      ],
+      "common_errors": [
+        "Skipping this step entirely — remind them this locking fold is important for structural integrity",
+        "Folding the wrong flap — they should fold the small triangle from step 3, not undo a corner fold",
+        "Folding the tab DOWNWARD instead of upward — it needs to go UP and over the corner folds to lock them",
+        "Not pressing the tab flat — it should be creased firmly so it stays in place"
+      ]
+    },
+    {
+      "step": 6,
+      "instruction": "Flip the entire paper over (face down). Fold it in half along the center crease so the folded side is on the outside. Then fold each wing down — the wing's bottom edge should line up with the bottom fold of the body. Your airplane is done!",
+      "visual_cue": "A completed dart airplane: pointed nose, two symmetrical wings angled slightly upward from the body, a flat narrow body along the bottom. Viewed from the front, it forms a Y-shape. Viewed from the side, the wing edge is parallel to the body.",
+      "during_action_cues": [
+        "First: user should FLIP the paper over — all the folds from previous steps are now face-down on the table",
+        "Then: user folds the paper in half along the existing center crease — the folded/layered side should be on the OUTSIDE",
+        "After folding in half, the shape should be a long triangle with the point on one side",
+        "Then: user folds one wing down — the fold should start at the nose and run to the tail, with the wing edge aligning with the bottom body fold",
+        "Then: flip and fold the other wing to match — both wings should be the same width and angle",
+        "Wings should angle slightly upward from the body when held level — not straight out flat, not drooping down"
+      ],
+      "common_errors": [
+        "Forgetting to flip the paper over first — the clean side should face up when folding in half",
+        "Folding in half the wrong way — the fold should be along the existing center crease",
+        "Wings are asymmetrical — one wider or at a different angle than the other",
+        "Wings fold too far down — the wing edge should align with the bottom body fold, not extend past it",
+        "Wings droop downward instead of angling slightly up — they should hold a slight upward angle (dihedral)"
+      ]
+    }
+  ]
+}

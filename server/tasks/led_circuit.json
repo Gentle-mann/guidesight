@@ -1,0 +1,53 @@
+{
+  "id": "led_circuit",
+  "name": "Build an LED Circuit",
+  "description": "Build a simple LED circuit on a breadboard with a resistor and battery.",
+  "difficulty": "beginner",
+  "estimated_time": "5 minutes",
+  "cv_tools": ["object_detection", "hand_tracking", "color_segmentation"],
+  "components": [
+    "1x Breadboard",
+    "1x LED (any color)",
+    "1x 220 ohm resistor (red-red-brown-gold bands)",
+    "2x Jumper wires",
+    "1x 3V coin battery with holder"
+  ],
+  "steps": [
+    {
+      "step": 1,
+      "instruction": "Place the LED on the breadboard. Insert the longer leg (positive/anode) into hole E10 and the shorter leg (negative/cathode) into hole E11.",
+      "visual_cue": "The LED should be straddling the center gap of the breadboard with legs in column E.",
+      "common_errors": ["LED legs in the same row", "LED inserted backwards (short leg in E10)"]
+    },
+    {
+      "step": 2,
+      "instruction": "Take the 220 ohm resistor — it has red, red, brown, and gold colored bands. Insert one leg into hole A10 and the other leg into hole A6.",
+      "visual_cue": "The resistor should bridge from row 10 to row 6, connecting to the same row as the LED's positive leg.",
+      "common_errors": ["Wrong resistor value", "Resistor not in the same row as LED anode"]
+    },
+    {
+      "step": 3,
+      "instruction": "Take a red jumper wire. Connect one end to hole A6 (same row as one end of the resistor) and the other end to the positive (+) power rail on the side of the breadboard.",
+      "visual_cue": "Red wire goes from row 6 to the red (+) rail.",
+      "common_errors": ["Connected to wrong rail (negative instead of positive)", "Wrong row"]
+    },
+    {
+      "step": 4,
+      "instruction": "Take a black jumper wire. Connect one end to hole A11 (same row as the LED's shorter/negative leg) and the other end to the negative (-) power rail.",
+      "visual_cue": "Black wire goes from row 11 to the blue (-) rail.",
+      "common_errors": ["Connected to positive rail instead of negative", "Wrong row"]
+    },
+    {
+      "step": 5,
+      "instruction": "Connect the battery holder. Attach the red wire from the battery holder to the positive (+) power rail and the black wire to the negative (-) power rail.",
+      "visual_cue": "Battery holder wires connect to the power rails on the side of the breadboard.",
+      "common_errors": ["Reversed polarity (red to negative)", "Loose connection"]
+    },
+    {
+      "step": 6,
+      "instruction": "Insert the 3V coin battery into the holder with the positive (+) side facing up. The LED should light up!",
+      "visual_cue": "The LED glows. If it doesn't, check all connections and LED orientation.",
+      "common_errors": ["Battery inserted upside down", "Loose connections somewhere in the circuit"]
+    }
+  ]
+}

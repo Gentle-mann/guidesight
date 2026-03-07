@@ -1,0 +1,75 @@
+{
+  "components": [
+    "2x Slices of bread",
+    "1x Egg",
+    "Butter or cooking oil",
+    "Salt",
+    "Pepper",
+    "Frying pan",
+    "Spatula"
+  ],
+  "cv_processor": "hand_tracking",
+  "cv_processor_reason": "Hand tracking is essential for monitoring the user's interaction with the pan, egg, and bread throughout the sandwich preparation process.",
+  "description": "A simple guide to preparing a delicious egg sandwich.",
+  "difficulty": "beginner",
+  "estimated_time": "10 minutes",
+  "id": "make_an_egg_sandwich",
+  "name": "Make an Egg Sandwich",
+  "steps": [
+    {
+      "common_errors": [
+        "Pan is too hot and smoking",
+        "Not enough butter/oil added",
+        "Pan is off-center on the burner"
+      ],
+      "instruction": "Place a frying pan on the stove and add a small amount of butter or cooking oil. Turn the heat to medium.",
+      "step": 1,
+      "visual_cue": "A pan is on the stove with butter or oil melting/heating; heat dial is set to medium."
+    },
+    {
+      "common_errors": [
+        "Eggshell pieces fall into the pan",
+        "Egg yolk breaks upon cracking",
+        "Forgetting to season the egg",
+        "Cracking the egg too forcefully",
+        "Egg running off to the side of the pan"
+      ],
+      "instruction": "Crack the egg directly into the heated pan. Season the egg with a pinch of salt and pepper.",
+      "step": 2,
+      "visual_cue": "An egg is cooking in the pan, with visible seasoning on top."
+    },
+    {
+      "common_errors": [
+        "Egg is overcooked and rubbery",
+        "Egg is undercooked with raw whites",
+        "Sticking the egg to the pan",
+        "Splattering oil when flipping",
+        "Burning hands on the pan",
+        "Egg breaks when flipping"
+      ],
+      "instruction": "Cook the egg to your desired doneness, flipping once if making a fried egg, then remove from heat and place the cooked egg on a plate.",
+      "step": 3,
+      "visual_cue": "The cooked egg is fully set or has a runny yolk as desired, and is resting on a clean plate."
+    },
+    {
+      "common_errors": [
+        "Egg falls off the bread slice",
+        "Bread is torn or crumbled",
+        "Using only one slice of bread"
+      ],
+      "instruction": "Place two slices of bread on a clean surface. Carefully transfer the cooked egg onto one slice of bread.",
+      "step": 4,
+      "visual_cue": "Two slices of bread are on the surface, and the cooked egg is centered on one of them."
+    },
+    {
+      "common_errors": [
+        "Top slice of bread is misaligned",
+        "Ingredients spill out the sides when pressing",
+        "Pressing too hard and squishing the sandwich"
+      ],
+      "instruction": "Place the second slice of bread on top of the egg, creating the sandwich. Gently press down to secure the contents.",
+      "step": 5,
+      "visual_cue": "A complete sandwich is formed with the egg neatly enclosed between two slices of bread."
+    }
+  ]
+}
