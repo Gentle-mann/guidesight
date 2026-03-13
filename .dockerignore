@@ -1,0 +1,12 @@
+venv/
+node_modules/
+dist/
+__pycache__/
+*.pyc
+.env
+.DS_Store
+.git/
+.claude/
+*.md
+!server/prompts/*.md
+!requirements*.txt

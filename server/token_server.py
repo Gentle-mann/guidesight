@@ -19,11 +19,7 @@ from pydantic import BaseModel, Field
 load_dotenv(Path(__file__).parent.parent / ".env")
 
 app = Flask(__name__)
-ALLOWED_ORIGINS = os.environ.get(
-    "CORS_ORIGINS",
-    "http://localhost:5173,http://localhost:4173,https://client-sigma-nine-62.vercel.app,https://guidesight.vercel.app,https://idol-editor-does-married.trycloudflare.com"
-).split(",")
-CORS(app, origins=ALLOWED_ORIGINS)
+CORS(app, origins="*")
 
 client = Stream(
     api_key=os.environ["STREAM_API_KEY"],
@@ -83,6 +79,16 @@ def _safe_task_id(task_id: str):
     if not SAFE_ID_RE.match(task_id):
         return None
     return task_id
+
+
+@app.route("/health")
+def health():
+    return jsonify({"status": "ok"})
+
+
+@app.route("/readyz")
+def readyz():
+    return jsonify({"status": "ready"})
 
 
 @app.route("/token/<user_id>")

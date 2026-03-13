@@ -17,7 +17,7 @@ import { LandingPage } from './components/LandingPage';
 
 const API_KEY = 'eu24qn67gz64';
 const USER_ID = 'guidesight-user';
-const TOKEN_SERVER = import.meta.env.VITE_TOKEN_SERVER || 'http://localhost:8080';
+const TOKEN_SERVER = import.meta.env.VITE_TOKEN_SERVER || 'https://innocent-melbourne-forty-petroleum.trycloudflare.com';
 
 function App() {
   const [client, setClient] = useState<StreamVideoClient | null>(null);

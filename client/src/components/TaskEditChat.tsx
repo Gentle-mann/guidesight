@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import type { TaskDetail } from '../types';
 
-const TOKEN_SERVER = import.meta.env.VITE_TOKEN_SERVER || 'http://localhost:8080';
+const TOKEN_SERVER = import.meta.env.VITE_TOKEN_SERVER || 'https://innocent-melbourne-forty-petroleum.trycloudflare.com';
 
 interface ChatMessage {
   role: 'user' | 'ai';

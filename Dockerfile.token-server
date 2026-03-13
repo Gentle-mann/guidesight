@@ -1,0 +1,14 @@
+FROM --platform=linux/amd64 python:3.11-slim
+
+WORKDIR /app
+
+# Install only the deps needed for the token server
+COPY requirements-token-server.txt .
+RUN pip install --no-cache-dir -r requirements-token-server.txt
+
+# Copy server code and tasks
+COPY server/ ./server/
+
+EXPOSE 8080
+
+CMD ["python", "server/token_server.py"]

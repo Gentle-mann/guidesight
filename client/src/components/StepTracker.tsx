@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-const TOKEN_SERVER = import.meta.env.VITE_TOKEN_SERVER || 'http://localhost:8080';
+const TOKEN_SERVER = import.meta.env.VITE_TOKEN_SERVER || 'https://innocent-melbourne-forty-petroleum.trycloudflare.com';
 
 interface Step {
   step: number;

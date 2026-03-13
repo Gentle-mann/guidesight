@@ -6,7 +6,7 @@ import { PROCESSOR_TO_TOOLS as _PROCESSOR_TO_TOOLS } from '../cvTools';
 void _PROCESSOR_TO_TOOLS;
 import type { TaskSummary, TaskDetail, TaskStep } from '../types';
 
-const TOKEN_SERVER = import.meta.env.VITE_TOKEN_SERVER || 'http://localhost:8080';
+const TOKEN_SERVER = import.meta.env.VITE_TOKEN_SERVER || 'https://innocent-melbourne-forty-petroleum.trycloudflare.com';
 
 const DIFFICULTY_CONFIG: Record<string, { stripe: string; bg: string; text: string }> = {
   beginner: { stripe: 'bg-emerald-500', bg: 'bg-emerald-500/10', text: 'text-emerald-400' },
