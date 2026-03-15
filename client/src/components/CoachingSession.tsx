@@ -4,6 +4,7 @@ import { Toaster, toast } from 'sonner';
 import { useHotkeys } from 'react-hotkeys-hook';
 import confetti from 'canvas-confetti';
 import { StepTracker } from './StepTracker';
+import { DebugPanel } from './DebugPanel';
 import type { TaskDetail } from '../types';
 
 // --- Error Boundary (Tier 1.5) ---
@@ -291,6 +292,26 @@ function CoachingSessionInner({ task, onEndSession }: CoachingSessionProps) {
           });
           break;
 
+        case 'claude_verification': {
+          const verified = data.verified;
+          const reason = data.reason || '';
+          const step = data.step || '';
+          if (verified) {
+            toast.success(`Claude verified step ${step}: ${reason}`, {
+              duration: 4000,
+              icon: '🔍',
+              style: { background: '#0d2a15', border: '1px solid #34a853', color: '#4ade80' },
+            });
+          } else {
+            toast(`Claude rejected step ${step}: ${reason}`, {
+              duration: 5000,
+              icon: '🔍',
+              style: { background: '#2a1d10', border: '1px solid #d4a574', color: '#e8c49a' },
+            });
+          }
+          break;
+        }
+
         // Tier 2.7: Live captions from agent speech
         case 'agent_caption':
           if (data.text) {
@@ -368,8 +389,10 @@ function CoachingSessionInner({ task, onEndSession }: CoachingSessionProps) {
 
   return (
     <div className="h-screen flex flex-col bg-[var(--bg-primary)]">
+      {/* Debug Panel — AI pipeline monitor */}
+      <DebugPanel />
       {/* Main content — video + step tracker */}
-      <div className="flex-1 flex flex-col md:flex-row gap-0 overflow-hidden">
+      <div className="flex-1 flex flex-col md:flex-row gap-0 overflow-hidden ml-0 md:ml-[340px]">
         {/* Camera feed — takes ~75% of screen */}
         <div className="flex-1 relative min-h-0">
           <div className={`h-full relative overflow-hidden bg-[var(--bg-secondary)] transition-all duration-500 ${glowClass}`}>

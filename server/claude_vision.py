@@ -39,11 +39,8 @@ MODEL_ROUTINE = "claude-sonnet-4-20250514"   # Sonnet for all checks during hack
 MODEL_URGENT = "claude-sonnet-4-20250514"    # Full power for user questions
 
 
-def frame_to_base64(frame, max_dim: int = 512) -> str:
-    """Convert an av.VideoFrame to a base64-encoded JPEG string.
-
-    Uses 512px max (down from 768) to reduce token count per image.
-    """
+def frame_to_base64(frame, max_dim: int = 512, quality: int = 75) -> str:
+    """Convert an av.VideoFrame to a base64-encoded JPEG string."""
     if hasattr(frame, "to_image"):
         img = frame.to_image()
     else:
@@ -54,7 +51,7 @@ def frame_to_base64(frame, max_dim: int = 512) -> str:
         img.thumbnail((max_dim, max_dim), Image.LANCZOS)
 
     buf = io.BytesIO()
-    img.save(buf, format="JPEG", quality=75)
+    img.save(buf, format="JPEG", quality=quality)
     return base64.standard_b64encode(buf.getvalue()).decode("utf-8")
 
 
@@ -255,6 +252,123 @@ Use the observation history and conversation for context — don't repeat yourse
     except Exception as e:
         logger.error(f"[Claude Vision] Analysis failed: {e}")
         return None
+
+
+async def verify_step_completion(frame, task: dict, step_number: int) -> dict:
+    """
+    Visual gatekeeper: Send current frame to Claude and ask a YES/NO
+    question about whether the step's visual cue is satisfied.
+
+    Returns {"verified": bool, "reason": str}
+
+    This is the architectural fix for Gemini confirmation bias.
+    Gemini coaches and proposes step completion.
+    Claude verifies by looking at the actual frame.
+    """
+    client = _get_client()
+
+    # Find the step
+    step = None
+    for s in task.get("steps", []):
+        if s["step"] == step_number:
+            step = s
+            break
+
+    if step is None:
+        return {"verified": False, "reason": f"Step {step_number} not found in task."}
+
+    visual_cue = step["visual_cue"]
+    common_errors = step.get("common_errors", [])
+
+    prompt = f"""You are a visual verifier for a physical task coaching app.
+
+TASK: {task['name']}
+STEP {step_number}: {step['instruction']}
+
+EXPECTED VISUAL CUE (what it should look like when DONE): {visual_cue}
+
+COMMON MISTAKES:
+{chr(10).join(f"- {e}" for e in common_errors)}
+
+Look at this image from the user's camera. Answer ONE question:
+
+**Does the image show reasonable evidence that step {step_number} has been completed?**
+
+Guidelines:
+- Say YES if the image shows the object in a state consistent with the step being done, even if the camera angle isn't perfect.
+- Say YES if you can see the user holding/showing the result and it looks plausible.
+- Say NO if you see CLEAR CONTRADICTIONS — e.g., flaps are visibly still sticking up when they should be folded, or the box is clearly still flat when it should be 3D.
+- Say NO if the object described in the step is not visible at all in the frame.
+- When in doubt and the object is visible, lean towards YES — the user is physically present and the AI coach has been watching them work.
+
+Respond in this EXACT JSON format:
+{{"verified": true/false, "reason": "One sentence explaining what you see"}}
+
+Examples:
+- Step says "open box into rectangular shape" and you see a 3D box → YES
+- Step says "flaps folded" but you clearly see all flaps sticking UP → NO
+- Step says "tape applied" and you see a box but can't see the bottom → YES (can't contradict)
+- Step says "flip box upside down" and you see a box being held → YES (reasonable)
+- No box visible in frame at all → NO"""
+
+    try:
+        # Log frame size for debugging
+        if hasattr(frame, "to_image"):
+            _img = frame.to_image()
+        else:
+            _arr = frame.to_ndarray(format="rgb24")
+            _img = Image.fromarray(_arr)
+        logger.info(f"[Claude Verify] Input frame: {_img.width}x{_img.height}")
+        b64_image = frame_to_base64(frame, max_dim=1024, quality=90)  # High res for verification
+
+        response = await asyncio.wait_for(
+            client.messages.create(
+                model=MODEL_ROUTINE,
+                max_tokens=100,
+                messages=[{
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "image",
+                            "source": {
+                                "type": "base64",
+                                "media_type": "image/jpeg",
+                                "data": b64_image,
+                            },
+                        },
+                        {"type": "text", "text": prompt},
+                    ],
+                }],
+            ),
+            timeout=10.0,
+        )
+
+        raw_text = response.content[0].text.strip()
+        logger.info(f"[Claude Verify] Step {step_number}: {raw_text}")
+
+        # Parse JSON
+        text = raw_text
+        if text.startswith("```"):
+            text = text.split("\n", 1)[1] if "\n" in text else text[3:]
+            if text.endswith("```"):
+                text = text[:-3]
+            text = text.strip()
+
+        result = json.loads(text)
+        return {
+            "verified": bool(result.get("verified", False)),
+            "reason": result.get("reason", "No reason given"),
+        }
+
+    except json.JSONDecodeError:
+        # If we can't parse, try to extract yes/no from text
+        lower = raw_text.lower()
+        verified = "true" in lower and "false" not in lower
+        return {"verified": verified, "reason": raw_text[:100]}
+    except Exception as e:
+        logger.error(f"[Claude Verify] Verification failed: {e}")
+        # On error, be conservative — don't verify
+        return {"verified": False, "reason": f"Verification service error: {e}"}
 
 
 class ClaudeVisionLoop:

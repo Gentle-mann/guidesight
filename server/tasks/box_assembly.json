@@ -8,6 +8,7 @@
     "1x Flat cardboard box",
     "1x Roll of packing tape"
   ],
+  "cv_tools": ["box_detection", "hand_tracking", "tape_detection"],
   "steps": [
     {
       "step": 1,
@@ -20,8 +21,8 @@
     },
     {
       "step": 2,
-      "instruction": "Flip the box upside down so the bottom faces up. Identify the four flaps: two SHORT flaps (on the narrower sides of the box) and two LONG flaps (on the wider sides). The short flaps are noticeably smaller — roughly half the width of the long flaps. Fold the two SHORT flaps inward first. They MUST go in before the long flaps.",
-      "visual_cue": "ONLY the two short flaps are folded inward and lying flat inside the box. The two long flaps are still sticking UP — not folded. From above, you should see: two small flaps lying flat at each narrow end, with a visible gap between them in the center, and two large flaps standing upright on the wider sides. If you see large flaps already folded down covering the box opening, this step was done WRONG (long flaps went first).",
+      "instruction": "Fold the two SHORT flaps inward first. The short flaps are on the narrower sides of the box — they are noticeably smaller, roughly half the width of the long flaps. They MUST go in before the long flaps. Leave the two LONG flaps open for now.",
+      "visual_cue": "The user is showing the box opening. Two SMALLER flaps are folded inward (flat against the inside). Two LARGER flaps are still sticking out or standing up — NOT folded yet. The opening is NOT fully closed because the long flaps are still up. If the opening looks fully closed or you see two large flaps folded down, the wrong flaps were folded first.",
       "during_action_cues": [
         "WATCH which flaps the user reaches for FIRST. Short flaps are on the NARROW ends of the box — they are visibly smaller. Long flaps are on the WIDE sides — they are larger and span the full width.",
         "If you see the user grabbing or folding a flap that spans the FULL WIDTH of the box (the longer dimension), STOP THEM IMMEDIATELY — that is a long flap, not a short flap. The long flaps must go LAST.",

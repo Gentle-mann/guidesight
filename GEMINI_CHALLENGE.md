@@ -105,10 +105,10 @@
 |---|---|---|
 | Uses a Gemini model | **DONE** — Gemini 2.5 Flash via Live API | None |
 | Uses Google GenAI SDK or ADK | **DONE** — `google-genai` 1.65.0 (direct imports in agent.py + token_server.py, also via vision_agents) | Show direct SDK usage prominently in README |
-| At least one Google Cloud service | **READY** — Dockerfiles + deploy.sh created, tested locally | Run `./deploy.sh` against a GCP project |
-| Backend hosted on Google Cloud | **READY** — Dockerfiles + deploy.sh created, tested locally | Run `./deploy.sh` against a GCP project |
+| At least one Google Cloud service | **DONE** — 3 services on Cloud Run (`zeta-resource-490106-a7`) | None |
+| Backend hosted on Google Cloud | **DONE** — Token server + agent on Cloud Run `us-central1` | None |
 | Proof of GCP deployment | **MISSING** | Screen recording of Cloud Console after deploy |
-| Public code repository | **MISSING** | Push to public GitHub repo |
+| Public code repository | **DONE** — https://github.com/Gentle-mann/guidesight | None |
 | Spin-up instructions in README | **DONE** — `README.md` with local + Cloud Run instructions | None |
 | Architecture diagram | **DONE** — Mermaid diagram in `architecture.md` | Create polished visual version for video/Devpost |
 | Demo video (<4 min) | **MISSING** | Record demo + pitch |
@@ -347,17 +347,19 @@ Must include:
 
 ## Immediate Next Steps
 
-1. ~~**Set up Google Cloud project**~~ — need GCP project ID ⏳
+1. ~~**Set up Google Cloud project**~~ ✅ DONE (`zeta-resource-490106-a7`)
 2. ~~**Create Dockerfiles**~~ ✅ DONE (3 Dockerfiles, all tested)
 3. ~~**Make token server URL configurable**~~ ✅ ALREADY DONE (env var `TOKEN_SERVER`)
 4. ~~**Make frontend API URL configurable**~~ ✅ ALREADY DONE (env var `VITE_TOKEN_SERVER`)
 5. ~~**Add CORS to token server**~~ ✅ ALREADY DONE (`flask_cors`)
-6. **Deploy to Cloud Run** and verify it works ⏳ (run `./deploy.sh PROJECT_ID`)
-7. ~~**Create `deploy.sh`**~~ ✅ DONE
+6. ~~**Deploy to Cloud Run**~~ ✅ DONE — all 3 services live and verified
+7. ~~**Create `deploy.sh`**~~ ✅ DONE (updated with `buildx --provenance=false` fix)
 8. ~~**Create architecture diagram (Mermaid)**~~ ✅ DONE (`architecture.md`)
 8b. **Create polished architecture diagram** (Excalidraw/draw.io for video) ⏳
-9. ~~**Write README.md**~~ ✅ DONE (local + Cloud Run instructions, tech stack, third-party disclosures)
-10. **Record demo video** (<4 min) ⏳
-11. **Record GCP proof video** (30-60 sec) ⏳
-12. **Submit on Devpost** ⏳
-13. **Sign up for Google Developer Group** (bonus points) ⏳
+9. ~~**Write README.md**~~ ✅ DONE
+10. ~~**Push to public GitHub**~~ ✅ DONE (https://github.com/Gentle-mann/guidesight)
+11. **Record demo video** (<4 min) ⏳
+12. **Record GCP proof video** (30-60 sec) ⏳
+13. **Submit on Devpost** ⏳
+14. **Sign up for Google Developer Group** (bonus points) ⏳
+15. **Blog post with #GeminiLiveAgentChallenge** (bonus points) ⏳

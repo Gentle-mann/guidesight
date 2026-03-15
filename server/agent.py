@@ -27,7 +27,8 @@ from vision_agents.core.llm.events import (
 from vision_agents.plugins import getstream, gemini
 
 from paper_detector import PaperDetectorProcessor
-from claude_vision import ClaudeVisionLoop
+from box_detector import BoxDetectorProcessor
+from claude_vision import ClaudeVisionLoop, verify_step_completion
 
 # Monkey-patch JPEG quality: must patch the name directly in gemini_realtime
 # because it uses `from video_utils import frame_to_png_bytes` (direct binding).
@@ -100,14 +101,20 @@ def build_system_prompt(task: dict) -> str:
 # Global reference to current task and agent
 current_task = {}
 agent_ref = {"agent": None}
+latest_frame_ref = {"frame": None}  # Latest raw frame for Claude verification
 
 # --- Coaching state ---
+import time as _time
+
 coaching_state = {
     "current_step": 1,
     "completed_steps": [],
     "errors": [],
     "task_complete": False,
+    "step_start_time": _time.time(),
 }
+
+MIN_STEP_DURATION = 15  # Minimum seconds before a step can be marked complete
 
 # Generate a unique call ID per agent run to avoid stale WebRTC state
 CALL_ID = f"gs-{uuid.uuid4().hex[:8]}"
@@ -185,6 +192,18 @@ def create_llm():
         print(f"[VISION CHECK] Step {step_number}: {what_i_see}")
         if concerns:
             print(f"[VISION CONCERN] {concerns}")
+        # Send Gemini's observation to frontend debug panel
+        if agent_ref["agent"]:
+            try:
+                await agent_ref["agent"].send_custom_event({
+                    "type": "debug_gemini_action",
+                    "action": "describe_frame",
+                    "message": f"Gemini sees: {what_i_see[:120]}",
+                    "detail": f"Matches expected: {matches_expected}" + (f" | Concerns: {concerns}" if concerns else ""),
+                    "status": "success" if matches_expected else "error",
+                })
+            except Exception:
+                pass
         return {
             "analyzed": True,
             "step": step_number,
@@ -199,14 +218,106 @@ def create_llm():
     @llm.register_function(
         name="mark_step_complete",
         description=(
-            "Mark a task step as completed. You MUST call describe_current_frame first "
-            "to prove you analyzed the video frame. Only call this after visually confirming "
-            "the step result matches the expected visual cue."
+            "Mark a task step as completed. STRICT REQUIREMENTS before calling this: "
+            "1) You MUST have called describe_current_frame first. "
+            "2) You MUST have asked the user to SHOW you the result (e.g. 'Can you hold that up so I can see?'). "
+            "3) You MUST have received a verbal confirmation from the user that they completed the step. "
+            "4) At least 30 seconds must have passed on this step. "
+            "If ANY of these are not met, do NOT call this function. When in doubt, ask the user."
         ),
     )
     async def mark_step_complete(step_number: int, notes: str = "") -> dict:
+        # Sequential enforcement: can only complete the CURRENT step
+        if step_number != coaching_state["current_step"]:
+            print(f"[STEP BLOCKED] Step {step_number} rejected — current step is {coaching_state['current_step']}")
+            return {
+                "success": False,
+                "message": (
+                    f"REJECTED: You tried to complete step {step_number} but the current step is "
+                    f"{coaching_state['current_step']}. You must complete steps in order. "
+                    f"Focus on step {coaching_state['current_step']} first."
+                ),
+            }
+
+        # Time-gate: reject if step hasn't been active long enough
+        elapsed = _time.time() - coaching_state.get("step_start_time", 0)
+        if elapsed < MIN_STEP_DURATION:
+            remaining = int(MIN_STEP_DURATION - elapsed)
+            print(f"[STEP BLOCKED] Step {step_number} rejected — only {elapsed:.0f}s elapsed (need {MIN_STEP_DURATION}s)")
+            return {
+                "success": False,
+                "message": (
+                    f"REJECTED: You must watch the user for at least {remaining} more seconds "
+                    f"before marking this step complete. Keep observing and describe what you "
+                    f"ACTUALLY see them doing. Do NOT call mark_step_complete again until you "
+                    f"have watched long enough to be CERTAIN the step is done correctly."
+                ),
+            }
+
+        # Notify frontend that Gemini is attempting to advance
+        if agent_ref["agent"]:
+            try:
+                await agent_ref["agent"].send_custom_event({
+                    "type": "debug_gemini_action",
+                    "action": "mark_step_complete",
+                    "message": f"Gemini wants to mark step {step_number} complete",
+                    "detail": notes or None,
+                    "status": "pending",
+                })
+            except Exception:
+                pass
+
+        # Claude visual verification gate — send the current frame to Claude
+        # to independently verify the step is actually done
+        frame = latest_frame_ref.get("frame")
+        if frame is not None:
+            # Notify frontend about Claude verification prompt
+            step_info = None
+            for s in current_task.get("steps", []):
+                if s["step"] == step_number:
+                    step_info = s
+                    break
+            if agent_ref["agent"] and step_info:
+                try:
+                    await agent_ref["agent"].send_custom_event({
+                        "type": "debug_claude_prompt",
+                        "step": step_number,
+                        "visual_cue": step_info.get("visual_cue", ""),
+                    })
+                except Exception:
+                    pass
+            try:
+                verification = await verify_step_completion(frame, current_task, step_number)
+                # Send verification result to frontend for display
+                if agent_ref["agent"]:
+                    try:
+                        await agent_ref["agent"].send_custom_event({
+                            "type": "claude_verification",
+                            "step": step_number,
+                            "verified": verification["verified"],
+                            "reason": verification["reason"],
+                        })
+                    except Exception:
+                        pass
+
+                if not verification["verified"]:
+                    print(f"[STEP REJECTED BY CLAUDE] Step {step_number}: {verification['reason']}")
+                    return {
+                        "success": False,
+                        "message": (
+                            f"REJECTED by visual verification: {verification['reason']}. "
+                            f"The step does NOT appear to be complete based on the camera image. "
+                            f"Look more carefully at what the user is showing you. "
+                            f"Ask them to show you the result clearly before trying again."
+                        ),
+                    }
+                print(f"[CLAUDE VERIFIED] Step {step_number}: {verification['reason']}")
+            except Exception as e:
+                print(f"[CLAUDE VERIFY ERROR] Step {step_number}: {e} — allowing advancement")
+
         coaching_state["completed_steps"].append(step_number)
         coaching_state["current_step"] = step_number + 1
+        coaching_state["step_start_time"] = _time.time()  # Reset timer for next step
         print(f"[STEP COMPLETE] Step {step_number}: {notes}")
 
         if coaching_state["current_step"] > len(current_task.get("steps", [])):
@@ -310,6 +421,7 @@ async def main():
     # Wait for the user to select a task from the frontend
     print("[GuideSight] Waiting for task selection from frontend...")
     current_task = await wait_for_task_selection()
+    coaching_state["step_start_time"] = _time.time()  # Start timer for step 1
     system_prompt = build_system_prompt(current_task)
 
     agent_user = User(name="GuideSight Coach", id="guidesight-coach")
@@ -345,10 +457,30 @@ async def main():
         try:
             # Fresh LLM + processor each session (Agent.close() destroys them)
             llm = create_llm()
-            paper_detector = PaperDetectorProcessor(fps=2.0)
 
-            # Wire paper detector to feed raw frames to Claude
-            paper_detector._claude_frame_callback = claude_vision.update_frame
+            # Use PaperDetectorProcessor for all tasks — hand tracking is
+            # universally useful, and the box-specific CV produces too many
+            # false positives (HSV ranges overlap with skin, shadows, etc.)
+            cv_processor = PaperDetectorProcessor(fps=2.0)
+
+            # Wire processor to feed raw frames to Claude AND to verification ref
+            def _frame_callback(frame):
+                claude_vision.update_frame(frame)
+                latest_frame_ref["frame"] = frame
+            cv_processor._claude_frame_callback = _frame_callback
+
+            # Wire CV debug events to frontend
+            def _cv_debug_callback(event_data):
+                import asyncio as _aio
+                if agent_ref["agent"]:
+                    try:
+                        loop = _aio.get_event_loop()
+                        if loop.is_running():
+                            loop.create_task(agent_ref["agent"].send_custom_event(event_data))
+                    except Exception:
+                        pass
+            if hasattr(cv_processor, '_debug_event_callback'):
+                cv_processor._debug_event_callback = _cv_debug_callback
 
             # Fresh edge + call each session for clean WebRTC state
             if session_number > 1:
@@ -361,25 +493,42 @@ async def main():
                 llm=llm,
                 agent_user=agent_user,
                 instructions=system_prompt,
-                processors=[paper_detector],
+                processors=[cv_processor],
             )
             agent_ref["agent"] = agent
 
-            # Subscribe to transcript events → feed to Claude vision loop + frontend captions
+            # Subscribe to transcript events → feed to Claude vision loop + frontend debug + log
             @agent.events.subscribe
             async def on_user_transcript(event: RealtimeUserSpeechTranscriptionEvent):
                 if event.text:
                     claude_vision.add_transcript("user", event.text)
+                    print(f"[USER SPEECH] {event.text}")
+                    try:
+                        await agent.send_custom_event({
+                            "type": "debug_gemini_action",
+                            "action": "user_speech",
+                            "message": f"User: {event.text}",
+                            "status": "info",
+                        })
+                    except Exception:
+                        pass
 
             @agent.events.subscribe
             async def on_agent_transcript(event: RealtimeAgentSpeechTranscriptionEvent):
                 if event.text:
                     claude_vision.add_transcript("agent", event.text)
-                    # Forward to frontend for live captions
+                    print(f"[GEMINI SPEECH] {event.text}")
+                    # Forward to frontend for live captions + debug panel
                     try:
                         await agent.send_custom_event({
                             "type": "agent_caption",
                             "text": event.text,
+                        })
+                        await agent.send_custom_event({
+                            "type": "debug_gemini_action",
+                            "action": "speech",
+                            "message": f"Coach: {event.text}",
+                            "status": "info",
                         })
                     except Exception:
                         pass

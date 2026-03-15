@@ -93,7 +93,7 @@ See [`architecture.md`](architecture.md) for the full detailed diagram with data
 
 ```bash
 # 1. Clone and setup
-git clone https://github.com/YOUR_USERNAME/guidesight.git
+git clone https://github.com/Gentle-mann/guidesight.git
 cd guidesight
 cp .env.example .env
 # Edit .env with your API keys

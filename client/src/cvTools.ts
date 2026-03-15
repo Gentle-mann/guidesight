@@ -41,6 +41,26 @@ export const CV_TOOLS: CvTool[] = [
     status: 'implemented',
   },
   {
+    id: 'box_detection',
+    name: 'Box Detection',
+    shortName: 'Box',
+    description: 'Cardboard box contour detection, flap state identification, orientation via OpenCV HSV segmentation',
+    // box/package icon
+    iconPath: 'M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z M3.3 7l8.7 5 8.7-5M12 22V12',
+    color: '#d4a574',
+    status: 'implemented',
+  },
+  {
+    id: 'tape_detection',
+    name: 'Tape Detection',
+    shortName: 'Tape',
+    description: 'Packing tape strip detection, H-tape pattern verification, seam coverage via OpenCV color contrast',
+    // tape/strip icon
+    iconPath: 'M4 6h16v4H4V6zm0 8h16v4H4v-4zm2-2h12',
+    color: '#ef4444',
+    status: 'implemented',
+  },
+  {
     id: 'object_detection',
     name: 'Object Detection',
     shortName: 'Objects',
