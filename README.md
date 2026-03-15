@@ -1,6 +1,7 @@
 # GuideSight
 
 **Live app: https://guidesight.vercel.app**
+**Blog post: [How We Built a Real-Time AI Coach That Actually Sees](https://medium.com/@ishaqibrahimm1000/geminiliveagentchallenge-googlecloud-ai-gemini-70ceda22e762)**
 
 **Real-time AI coach that sees through your camera and talks you through physical tasks — like having an expert instructor looking over your shoulder.**
 
