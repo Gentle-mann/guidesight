@@ -122,6 +122,26 @@ npm run dev
 
 **Startup order matters**: Token server first → Agent second → Frontend last.
 
+## Reproducible Testing Instructions (for Judges)
+
+Once the app is running (locally or via Cloud Run):
+
+1. Open `http://localhost:5173` (or the Cloud Run frontend URL)
+2. Select **"Shipping Box Assembly & Seal"** from the task picker
+3. Click **Start** — wait for the AI Coach to connect (~10-30 seconds)
+4. **Test real-time coaching**: Hold a cardboard box in front of your camera. The AI will greet you and guide you through opening the box.
+5. **Test error detection**: When prompted to fold flaps, deliberately fold the **long flaps first** (the wrong order). The AI should catch this — you'll see a Claude rejection in the debug panel on the left.
+6. **Test verification**: Undo the wrong fold, fold the **short flaps first** (correct order), and show the box. Claude will verify and the step will advance.
+7. **Observe the debug panel** (left side): Shows the full AI pipeline in real-time — Gemini's speech, Claude verification prompts/responses, and step transitions.
+
+**What to look for:**
+- Gemini coaches via continuous voice (no button presses needed)
+- You can interrupt the AI naturally (barge-in support)
+- The debug panel shows "Gemini coaches, Claude verifies" in action
+- Steps only advance after independent visual verification
+
+**No physical materials?** You can also test with **"Fold a Paper Airplane"** using just a sheet of paper.
+
 ## Cloud Deployment (Google Cloud Run)
 
 ### Prerequisites
